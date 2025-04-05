@@ -1,6 +1,6 @@
 /**
  * Creates a Maze made up of MazeCells
- * @author Ms. Namasivayam
+ * @author Ms. Namasivayam, David Lutch
  * @version 03/04/2022
  */
 
@@ -147,6 +147,19 @@ public class Maze {
      */
     public boolean isValidCell(int row, int col) {
         // TODO: Complete this function
+        // Making sure that the cell is within the boundaries
+        if (numRows < row || row < 0) {
+            return false;
+        }
+        if (numCols < col || col < 0) {
+            return false;
+        }
+        if (mazeGrid[row][col].isWall()) {
+            return false;
+        }
+        if (mazeGrid[row][col].isExplored()) {
+            return false;
+        }
         return true;
     }
 }
