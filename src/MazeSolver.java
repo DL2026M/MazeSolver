@@ -1,6 +1,6 @@
 /**
  * Solves the given maze using DFS or BFS
- * @author Ms. Namasivayam
+ * @author Ms. Namasivayam, David Lutch
  * @version 03/10/2023
  */
 
@@ -34,6 +34,7 @@ public class MazeSolver {
         // Should be from start to end cells
         MazeCell currentCell = maze.getEndCell();
         ArrayList<MazeCell> notInOrderList = new ArrayList<MazeCell>();
+        // Adds the ending MazeCell to the ArrayList first
         notInOrderList.add(currentCell);
         while (maze.getStartCell() != currentCell) {
                 currentCell = currentCell.getParent();
@@ -41,6 +42,7 @@ public class MazeSolver {
         }
         return reverseOrder(notInOrderList);
     }
+    // A helper function that reverses the order of an ArrayList of MazeCells
     private ArrayList<MazeCell> reverseOrder(ArrayList<MazeCell> list) {
         Stack<MazeCell> stack = new Stack<MazeCell>();
         ArrayList<MazeCell> inOrderList = new ArrayList<MazeCell>();
@@ -48,6 +50,7 @@ public class MazeSolver {
         for (int i = 0; i < size; i++) {
             stack.push(list.get(i));
         }
+        // Removes the top MazeCell from the stack and adds it to ArrayList
         for (int j = 0; j < size; j++) {
             inOrderList.add(stack.pop());
         }
@@ -60,7 +63,35 @@ public class MazeSolver {
     public ArrayList<MazeCell> solveMazeDFS() {
         // TODO: Use DFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
-        return null;
+        Stack<MazeCell> order = new Stack<MazeCell>();
+        order.push(maze.getStartCell());
+        MazeCell nextCell;
+        while (order.peek() != maze.getEndCell()) {
+            MazeCell top = order.pop();
+
+            if (maze.isValidCell(top.getRow(), top.getCol() + 1)) {
+                nextCell = maze.getCell(top.getRow(), top.getCol() + 1);
+                order.push(nextCell);
+                nextCell.setParent(top);
+            }
+            if (maze.isValidCell(top.getRow() + 1 , top.getCol())) {
+                nextCell = maze.getCell(top.getRow() + 1, top.getCol());
+                order.push(nextCell);
+                nextCell.setParent(top);
+            }
+            if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
+                nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
+                order.push(nextCell);
+                nextCell.setParent(top);
+            }
+            if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
+                nextCell = maze.getCell(top.getRow() - 1, top.getCol());
+                order.push(nextCell);
+                nextCell.setParent(top);
+            }
+            top.setExplored(true);
+        }
+        return getSolution();
 
     }
 
@@ -71,7 +102,35 @@ public class MazeSolver {
     public ArrayList<MazeCell> solveMazeBFS() {
         // TODO: Use BFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
-        return null;
+        Queue<MazeCell> order = new LinkedList<MazeCell>();
+        order.add(maze.getStartCell());
+        MazeCell nextCell;
+        while (order.peek() != maze.getEndCell()) {
+            MazeCell top = order.remove();
+
+            if (maze.isValidCell(top.getRow(), top.getCol() + 1)) {
+                nextCell = maze.getCell(top.getRow(), top.getCol() + 1);
+                order.add(nextCell);
+                nextCell.setParent(top);
+            }
+            if (maze.isValidCell(top.getRow() + 1 , top.getCol())) {
+                nextCell = maze.getCell(top.getRow() + 1, top.getCol());
+                order.add(nextCell);
+                nextCell.setParent(top);
+            }
+            if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
+                nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
+                order.add(nextCell);
+                nextCell.setParent(top);
+            }
+            if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
+                nextCell = maze.getCell(top.getRow() - 1, top.getCol());
+                order.add(nextCell);
+                nextCell.setParent(top);
+            }
+            top.setExplored(true);
+        }
+        return getSolution();
     }
 
     public static void main(String[] args) {
