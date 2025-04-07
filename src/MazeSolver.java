@@ -64,35 +64,40 @@ public class MazeSolver {
         // TODO: Use DFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
         Stack<MazeCell> order = new Stack<MazeCell>();
+        // Adding the starting cell to the stack
         order.push(maze.getStartCell());
         MazeCell nextCell;
         while (order.peek() != maze.getEndCell()) {
             MazeCell top = order.pop();
-
-            if (maze.isValidCell(top.getRow(), top.getCol() + 1)) {
-                nextCell = maze.getCell(top.getRow(), top.getCol() + 1);
-                order.push(nextCell);
-                nextCell.setParent(top);
-            }
-            if (maze.isValidCell(top.getRow() + 1 , top.getCol())) {
+            if (maze.isValidCell(top.getRow() + 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() + 1, top.getCol());
+                // If the cell north of the current cell is valid, then add it to the stack of maze cells
                 order.push(nextCell);
                 nextCell.setParent(top);
+                nextCell.setExplored(true);
             }
-            if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
-                nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
+            if (maze.isValidCell(top.getRow(),top.getCol() + 1)) {
+                nextCell = maze.getCell(top.getRow(),top.getCol() + 1);
                 order.push(nextCell);
                 nextCell.setParent(top);
+                nextCell.setExplored(true);
             }
             if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() - 1, top.getCol());
                 order.push(nextCell);
                 nextCell.setParent(top);
+                nextCell.setExplored(true);
+
             }
-            top.setExplored(true);
+            if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
+                nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
+                order.push(nextCell);
+                // Setting the next cell as the parent of the current cell
+                nextCell.setParent(top);
+                nextCell.setExplored(true);
+            }
         }
         return getSolution();
-
     }
 
     /**
@@ -107,28 +112,31 @@ public class MazeSolver {
         MazeCell nextCell;
         while (order.peek() != maze.getEndCell()) {
             MazeCell top = order.remove();
-
-            if (maze.isValidCell(top.getRow(), top.getCol() + 1)) {
-                nextCell = maze.getCell(top.getRow(), top.getCol() + 1);
-                order.add(nextCell);
-                nextCell.setParent(top);
-            }
-            if (maze.isValidCell(top.getRow() + 1 , top.getCol())) {
+            if (maze.isValidCell(top.getRow() + 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() + 1, top.getCol());
                 order.add(nextCell);
                 nextCell.setParent(top);
+                nextCell.setExplored(true);
+            }
+            if (maze.isValidCell(top.getRow(),top.getCol() + 1)) {
+                nextCell = maze.getCell(top.getRow(), top.getCol() + 1);
+                order.add(nextCell);
+                nextCell.setParent(top);
+                nextCell.setExplored(true);
+            }
+            // Checks to see if the cell to the south is valid
+            if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
+                nextCell = maze.getCell(top.getRow() - 1, top.getCol());
+                order.add(nextCell);
+                nextCell.setParent(top);
+                nextCell.setExplored(true);
             }
             if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
                 nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
                 order.add(nextCell);
                 nextCell.setParent(top);
+                nextCell.setExplored(true);
             }
-            if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
-                nextCell = maze.getCell(top.getRow() - 1, top.getCol());
-                order.add(nextCell);
-                nextCell.setParent(top);
-            }
-            top.setExplored(true);
         }
         return getSolution();
     }
