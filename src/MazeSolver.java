@@ -34,8 +34,9 @@ public class MazeSolver {
         // Should be from start to end cells
         MazeCell currentCell = maze.getEndCell();
         ArrayList<MazeCell> notInOrderList = new ArrayList<MazeCell>();
-        // Adds the ending MazeCell to the ArrayList first
+        // Adds the ending MazeCell to the beginning of the ArrayList
         notInOrderList.add(currentCell);
+        // Runs until the current cell meets the starting cell
         while (maze.getStartCell() != currentCell) {
                 currentCell = currentCell.getParent();
                 notInOrderList.add(currentCell);
@@ -47,6 +48,7 @@ public class MazeSolver {
         Stack<MazeCell> stack = new Stack<MazeCell>();
         ArrayList<MazeCell> inOrderList = new ArrayList<MazeCell>();
         int size = list.size();
+        // Adds every element of the ArrayList to a stack
         for (int i = 0; i < size; i++) {
             stack.push(list.get(i));
         }
@@ -67,23 +69,25 @@ public class MazeSolver {
         // Adding the starting cell to the stack
         order.push(maze.getStartCell());
         MazeCell nextCell;
+        // Runs until the maze has been solved using depth first search
         while (order.peek() != maze.getEndCell()) {
             MazeCell top = order.pop();
-            if (maze.isValidCell(top.getRow() + 1, top.getCol())) {
-                nextCell = maze.getCell(top.getRow() + 1, top.getCol());
+            if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
+                nextCell = maze.getCell(top.getRow() - 1, top.getCol());
                 // If the cell north of the current cell is valid, then add it to the stack of maze cells
                 order.push(nextCell);
                 nextCell.setParent(top);
                 nextCell.setExplored(true);
             }
+            // Checks to see if the cell to the east is valid
             if (maze.isValidCell(top.getRow(),top.getCol() + 1)) {
                 nextCell = maze.getCell(top.getRow(),top.getCol() + 1);
                 order.push(nextCell);
                 nextCell.setParent(top);
                 nextCell.setExplored(true);
             }
-            if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
-                nextCell = maze.getCell(top.getRow() - 1, top.getCol());
+            if (maze.isValidCell(top.getRow() + 1, top.getCol())) {
+                nextCell = maze.getCell(top.getRow() + 1, top.getCol());
                 order.push(nextCell);
                 nextCell.setParent(top);
                 nextCell.setExplored(true);
@@ -92,7 +96,7 @@ public class MazeSolver {
             if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
                 nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
                 order.push(nextCell);
-                // Setting the next cell as the parent of the current cell
+                // Setting the cell to the west as the parent of the current cell
                 nextCell.setParent(top);
                 nextCell.setExplored(true);
             }
@@ -107,6 +111,7 @@ public class MazeSolver {
     public ArrayList<MazeCell> solveMazeBFS() {
         // TODO: Use BFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
+        // Using a queue instead of a stack to solve the maze
         Queue<MazeCell> order = new LinkedList<MazeCell>();
         order.add(maze.getStartCell());
         MazeCell nextCell;
@@ -116,6 +121,7 @@ public class MazeSolver {
                 nextCell = maze.getCell(top.getRow() + 1, top.getCol());
                 order.add(nextCell);
                 nextCell.setParent(top);
+                // Sets the next cell to be explored so that it isn't explored again
                 nextCell.setExplored(true);
             }
             if (maze.isValidCell(top.getRow(),top.getCol() + 1)) {
