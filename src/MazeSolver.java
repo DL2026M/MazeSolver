@@ -30,7 +30,6 @@ public class MazeSolver {
      * @return An arraylist of MazeCells to visit in order
      */
     public ArrayList<MazeCell> getSolution() {
-        // TODO: Get the solution from the maze
         // Should be from start to end cells
         MazeCell currentCell = maze.getEndCell();
         ArrayList<MazeCell> notInOrderList = new ArrayList<MazeCell>();
@@ -63,7 +62,6 @@ public class MazeSolver {
      * @return An ArrayList of MazeCells in order from the start to end cell
      */
     public ArrayList<MazeCell> solveMazeDFS() {
-        // TODO: Use DFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
         Stack<MazeCell> order = new Stack<MazeCell>();
         // Adding the starting cell to the stack
@@ -75,33 +73,31 @@ public class MazeSolver {
             if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() - 1, top.getCol());
                 // If the cell north of the current cell is valid, then add it to the stack of maze cells
-                order.push(nextCell);
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionDFS(order, nextCell, top);
             }
             // Checks to see if the cell to the east is valid
             if (maze.isValidCell(top.getRow(),top.getCol() + 1)) {
                 nextCell = maze.getCell(top.getRow(),top.getCol() + 1);
-                order.push(nextCell);
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionDFS(order, nextCell, top);
             }
             if (maze.isValidCell(top.getRow() + 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() + 1, top.getCol());
-                order.push(nextCell);
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionDFS(order, nextCell, top);
 
             }
             if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
                 nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
-                order.push(nextCell);
                 // Setting the cell to the west as the parent of the current cell
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionDFS(order, nextCell, top);
             }
         }
         return getSolution();
+    }
+    private void helperFunctionDFS(Stack<MazeCell> list, MazeCell nextCell, MazeCell topCell) {
+        // Adds the next cell to the top of the stack
+        list.push(nextCell);
+        nextCell.setParent(topCell);
+        nextCell.setExplored(true);
     }
 
     /**
@@ -109,7 +105,6 @@ public class MazeSolver {
      * @return An ArrayList of MazeCells in order from the start to end cell
      */
     public ArrayList<MazeCell> solveMazeBFS() {
-        // TODO: Use BFS to solve the maze
         // Explore the cells in the order: NORTH, EAST, SOUTH, WEST
         // Using a queue instead of a stack to solve the maze
         Queue<MazeCell> order = new LinkedList<MazeCell>();
@@ -119,33 +114,31 @@ public class MazeSolver {
             MazeCell top = order.remove();
             if (maze.isValidCell(top.getRow() + 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() + 1, top.getCol());
-                order.add(nextCell);
-                nextCell.setParent(top);
-                // Sets the next cell to be explored so that it isn't explored again
-                nextCell.setExplored(true);
+                helperFunctionBFS(order, nextCell, top);
             }
             if (maze.isValidCell(top.getRow(),top.getCol() + 1)) {
                 nextCell = maze.getCell(top.getRow(), top.getCol() + 1);
-                order.add(nextCell);
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionBFS(order, nextCell, top);
             }
             // Checks to see if the cell to the south is valid
             if (maze.isValidCell(top.getRow() - 1, top.getCol())) {
                 nextCell = maze.getCell(top.getRow() - 1, top.getCol());
-                order.add(nextCell);
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionBFS(order, nextCell, top);
             }
             if (maze.isValidCell(top.getRow(), top.getCol() - 1)) {
                 nextCell = maze.getCell(top.getRow(), top.getCol() - 1);
-                order.add(nextCell);
-                nextCell.setParent(top);
-                nextCell.setExplored(true);
+                helperFunctionBFS(order, nextCell, top);
             }
         }
         return getSolution();
     }
+    private void helperFunctionBFS(Queue<MazeCell> list, MazeCell nextCell, MazeCell topCell) {
+            list.add(nextCell);
+            nextCell.setParent(topCell);
+            // Sets the next cell to be explored so that it isn't explored again
+            nextCell.setExplored(true);
+    }
+
 
     public static void main(String[] args) {
         // Create the Maze to be solved

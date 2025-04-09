@@ -146,7 +146,6 @@ public class Maze {
      * @return boolean true/false
      */
     public boolean isValidCell(int row, int col) {
-        // TODO: Complete this function
         // Checking to see if the cell is within the boundaries, not a wall, and not been explored
         if (numRows <= row || row < 0) {
             return false;
